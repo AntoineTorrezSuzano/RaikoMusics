@@ -15,5 +15,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "Hello from GitHub Actions! This worked ??"
-            ls -la
+            echo "Hello from GitHub Actions! This worked ?? I don't know but we'll see !!!"
+            cd /main/raikomusics_backend
+
