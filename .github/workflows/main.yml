@@ -17,4 +17,7 @@ jobs:
           script: |
             echo "Hello from GitHub Actions! This worked ?? I don't know but we'll see !!!"
             cd /main/raikomusics_backend
+            git clone git@github.com:AntoineTorrezSuzano/RaikoMusics.git
+            cd /RaikoMusics
+            bash deploy.sh
 

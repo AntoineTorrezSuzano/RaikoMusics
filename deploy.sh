@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Deleting old repository..."
-rm -rf RaikoMusic/
-
-echo "Cloning Repository RaikoMusic..."
-git clone git@github.com:AntoineTorrezSuzano/RaikoMusic.git
-
-cd RaikoMusic || { echo "Failed to enter repository"; exit 1; }
 
 if [ -f Dockerfile ]; then
     echo "Dockerfile found."
