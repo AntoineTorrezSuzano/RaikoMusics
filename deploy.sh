@@ -13,7 +13,7 @@ else
 fi
 
 echo "Stopping old container if is running..."
-docker stop raikomusics_container >/dev/nul 2>&1 || true
+docker stop raikomusics_container >/dev/null 2>&1 || true
 
 echo "Removing old container if it exist..."
 docker rm raikomusics_container >/dev/null 2>&1 || true
