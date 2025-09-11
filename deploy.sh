@@ -32,3 +32,8 @@ HOSTNAMEIP="$(hostname -I | awk '{print $1}')"
 echo "RaikoMusics website is available at:"
 echo "  http://$HOSTNAMEIP:6777"
 echo "  http://localhost:6777"
+
+
+echo "Deploying AudioStreamServer..."
+cd AudioStreamServer
+bash deploy.sh
