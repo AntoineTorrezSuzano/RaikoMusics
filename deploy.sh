@@ -1,39 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TAG=$(git rev-parse --short HEAD)
+echo "Bringing down old services (if running)..."
+docker-compose down
 
-if [ -f Dockerfile ]; then
-    echo "Dockerfile found."
-    
-else
-    echo "Error: No Dockerfile found inside the repository."
-    ls -la 
-    exit 1
-fi
+echo "Building new Docker images..."
+docker-compose build
 
-echo "Stopping old container if is running..."
-docker stop raikomusics_container >/dev/null 2>&1 || true
-
-echo "Removing old container if it exist..."
-docker rm raikomusics_container >/dev/null 2>&1 || true
-
-echo "Building New Docker Image..."
-docker build -t raikomusics:$TAG .
-
-echo "Running container on port 6777..."
-docker run -d --restart unless-stopped -p 6777:80 --name raikomusics_container raikomusics:$TAG
+echo "Launching de Shrine the Melodies..."
+docker-compose up -d
 
 echo "Cleaning up dangling images..."
 docker image prune -f
 
-
 HOSTNAMEIP="$(hostname -I | awk '{print $1}')"
-echo "RaikoMusics website is available at:"
-echo "  http://$HOSTNAMEIP:6777"
-echo "  http://localhost:6777"
+echo "RaikoMusics is now operational:"
+echo "  - Frontend is available at http://$HOSTNAMEIP:6777 and http://localhost:6777"
+echo "  - Stream Server is available at http://$HOSTNAMEIP:6888 and http://localhost:6888"
 
-
-echo "Deploying AudioStreamServer..."
-cd AudioStreamServer
-bash deploy.sh

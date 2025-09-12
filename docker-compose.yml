@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # The Shrine Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raikomusics_container
+    restart: unless-stopped
+    ports:
+      - "6777:80"
+
+  # The Music Storehouse
+  stream_server:
+    build:
+      context: ./AudioStreamServer
+      dockerfile: Dockerfile
+    container_name: raikomusics_stream_container
+    restart: unless-stopped
+    ports:
+      - "6888:8080"
+    volumes:
+      - music-data:/var/www/music  # Connects to the permanent treasury
+
+  # The New Offering Hall
+  raikomusics_api:
+    build:
+      context: ./RaikoMusicsAPI
+      dockerfile: Dockerfile
+    container_name: raikomusics_api_container
+    restart: unless-stopped
+    ports:
+      - "6999:3000" # You can choose a different host port if you wish
+    volumes:
+      - music-data:/var/www/music  # Also connects to the same treasury
+
+volumes:
+  # Defines the permanent treasury
+  music-data:
