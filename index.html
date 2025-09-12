@@ -288,10 +288,13 @@
             const libraryListEl = document.getElementById('library-list');
 
             let libraryMusic = [
-                { id: 1, title: '青いミレン、蒼いナミダ', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/004/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/004/004.mp3' }
+                { id: 1, title: '幻想のサテライト', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/002/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/002/song.mp3' },
+                { id: 2, title: 'The fear is oneself', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/001/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/001/song.mp3' },
+                { id: 3, title: '青いミレン、蒼いナミダ', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/003/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/003/song.mp3' },
+
 
             ];
-            let playlistMusic = [libraryMusic[0]]; // Start with a default playlist
+            let playlistMusic = [libraryMusic[0], libraryMusic[1], libraryMusic[2]]; // Start with a default playlist
 
             let currentTrackIndex = 0;
             let isPlaying = false;
