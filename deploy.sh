@@ -8,7 +8,7 @@ echo "Building new Docker images..."
 docker-compose build
 
 echo "Launching de Shrine the Melodies..."
-docker-compose up -d
+docker-compose up --build --no-cache -d
 
 echo "Cleaning up dangling images..."
 docker image prune -f
