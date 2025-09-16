@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PROJECT_NAME=$(basename "$(pwd)")
+
 echo "Bringing down old services (if running)..."
 # -v flag is to take down the volumes
 docker-compose down -v
+
+echo "Removing the music_data volume"
+docker volume rm "${PROJECT_NAME}_music-data" 2>/dev/null || echo "Volume was already gone"
 
 echo "Building new Docker images..."
 docker-compose build --no-cache
 
 echo "Launching de Shrine the Melodies..."
-docker-compose up -d  ##Error to --no-cache
+docker-compose up -d 
 
 echo "Cleaning up dangling images..."
 docker image prune -f
