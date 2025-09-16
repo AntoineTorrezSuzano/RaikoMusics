@@ -57,6 +57,26 @@ app.post('/upload', upload.fields([
     res.status(200).send(`Song uploaded successfully`);
 });
 
+
+app.use((err, req, res, next) => {
+    console.error("An error occurred:", err.message);
+
+    if (err instanceof multer.MulterError) {
+        if (err.code === "UNEXPECTED_FIELD") {
+            return res.status(400).json({
+                success: false,
+                message: `Invalid field name.`
+            });
+        }
+        return res.status(400).json({ success: false, message: err.message });
+    }
+    res.status(500).json({
+        success: false,
+        message: 'An internal server error occurred. The offering could not be processed.'
+    });
+});
+
+
 app.listen(PORT, () => {
     console.log(`Offering hall is open and listening on port ${PORT}`);
 });
