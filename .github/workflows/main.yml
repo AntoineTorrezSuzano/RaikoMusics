@@ -16,7 +16,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /main/raikomusics_backend/RaikoMusics
-            git pull origin main
+            git fetch origin main
+            # Forcefully reset the local repository to match the rmeote branch
+            # It also discards all the local chnages and commits
+            git reset --hard origin/main
             bash deploy.sh
 
 
