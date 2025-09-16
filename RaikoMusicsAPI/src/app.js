@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Main router for all API endpoints
-app.use('/api', allRoutes);
+app.use('/', allRoutes);
 
 // Global error handling middleware (must be the last app.use)
 app.use(errorHandler);
