@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const config = require('../config');
 
@@ -10,7 +10,7 @@ const uploadMusic = async (req, res, next) => {
         if (!title || !artist) {
             // If validation fails after upload, clean up the created folder
             if (req.albumPath) {
-                await fs.rm(req.albumPath, { recursive: true, force: true }, () => { });
+                await fs.rm(req.albumPath, { recursive: true, force: true });
             }
             return res.status(400).json({ success: false, message: 'Title and artist are required.' });
         }
@@ -18,7 +18,7 @@ const uploadMusic = async (req, res, next) => {
         // Check if files were actually uploaded
         if (!req.files || !req.files.song || !req.files.cover) {
             if (req.albumPath) {
-                await fs.rm(req.albumPath, { recursive: true, force: true }, () => { });
+                await fs.rm(req.albumPath, { recursive: true, force: true });
             }
             return res.status(400).json({ success: false, message: 'Both a song and a cover image are required.' });
         }
