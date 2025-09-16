@@ -2,7 +2,8 @@
 set -euo pipefail
 
 echo "Bringing down old services (if running)..."
-docker-compose down 
+# -v flag is to take down the volumes
+docker-compose down -v
 
 echo "Building new Docker images..."
 docker-compose build --no-cache
