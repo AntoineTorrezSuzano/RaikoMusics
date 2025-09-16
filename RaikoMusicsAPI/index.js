@@ -18,6 +18,8 @@ const fileFilter = (req, file, cb) => {
         }
     } else if (file.fieldname === 'cover') {
         if (file.mimetype == "image/jpeg" || file.mimetype == "image/webp" || file.mimetype == "image/png") {
+            cb(null, true);
+        } else {
             cb(new Error('Invalid file type for cover. Only JPG, PNG, or WEBP are allowed.'), false);
         }
     } else {
