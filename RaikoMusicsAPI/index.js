@@ -11,7 +11,7 @@ fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const fileFilter = (req, file, cb) => {
     if (file.fieldname === 'song') {
-        if (file.mimetype === 'audio/mpg') {
+        if (file.mimetype === 'audio/mpeg') {
             cb(null, true)
         } else {
             cb(new Error('Invalid file type for song. Only MP3 is allowed'), false);
