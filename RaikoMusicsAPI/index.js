@@ -9,6 +9,22 @@ const UPLOADS_DIR = '/var/www/music';
 
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
+const fileFilter = (req, file, cb) => {
+    if (file.fieldname === 'song') {
+        if (file.mimetype === 'audio/mpg') {
+            cb(null, true)
+        } else {
+            cb(new Error('Invalid file type for song. Only MP3 is allowed'), false);
+        }
+    } else if (file.fieldname === 'cover') {
+        if (file.mimetype == "image/jpeg" || file.mimetype == "image/webp" || file.mimetype == "image/png") {
+            cb(new Error('Invalid file type for cover. Only JPG, PNG, or WEBP are allowed.'), false);
+        }
+    } else {
+        cb(new Error('Unexpected field in form.'), false);
+    }
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
 
@@ -20,33 +36,31 @@ const storage = multer.diskStorage({
         cb(null, req.albumPath);
     },
     filename: function (req, file, cb) {
-        let fileName;
-        if (file.mimetype == "audio/mpeg") {
-            fileName = "song.mp3";
-        } else if (file.mimetype == "image/jpeg" || file.mimetype == "image/webp" || file.mimetype == "image/png") {
-            fileName = "cover.jpg";
-        } else {
-            return cb(new Error('Unsupported file type!'));
-        }
+        let fileName = file.fieldname === 'song' ? 'song.mp3' : 'cover.jpg';
         cb(null, fileName);
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-app.post('/upload', upload.fields([
-    { name: 'song', maxCount: 1 },
-    { name: 'cover', maxCount: 1 }
-]), (req, res) => {
+app.post('/upload', (req, res, next) => {
+    upload.fields([{ name: 'song', maxCount: 1 }, { name: 'cover', maxCount: 1 }])(req, res, (err) => {
+        if (err && req.albumPath) {
+            // if an error occurs and a folder was created, it remove it (clean)
+            fs.rm(req.albumPath, { recursive: true, force: true }, () => { });
+        }
+        next(err);
+    });
 
+}, (req, res) => {
     const title = req.body.title;
     const artist = req.body.artist;
 
-    if (!title) {
-        return res.status(400).send('Title is required.');
-    }
-    if (!artist) {
-        return res.status(400).send('Artist is required.');
+    if (!title || !artist) {
+        if (req.albumPath) {
+            fs.rm(req.albumPath, { recursive: true, force: true }, () => { });
+        }
+        return res.status(400).send('Title and artist are required.');
     }
     const songPath = req.files.song[0].path;
     const coverPath = req.files.cover[0].path;
@@ -54,21 +68,19 @@ app.post('/upload', upload.fields([
     console.log(`Received new offering: "${title}" by ${artist}`);
     console.log(`Song saved to: ${songPath}`);
     console.log(`Cover saved to: ${coverPath}`);
-    res.status(200).send(`Song uploaded successfully`);
-});
+    res.status(200).send(`Song uploaded successfully `);
+}
+);
 
 
 app.use((err, req, res, next) => {
     console.error("An error occurred:", err.message);
 
     if (err instanceof multer.MulterError) {
-        if (err.code === "UNEXPECTED_FIELD") {
-            return res.status(400).json({
-                success: false,
-                message: `Invalid field name.`
-            });
-        }
         return res.status(400).json({ success: false, message: err.message });
+    }
+    if (err) {
+        return res.status(400).json({ sucess: false, message: err.message });
     }
     res.status(500).json({
         success: false,
