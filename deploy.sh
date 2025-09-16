@@ -5,10 +5,10 @@ echo "Bringing down old services (if running)..."
 docker-compose down
 
 echo "Building new Docker images..."
-docker-compose build
+docker-compose build --no-cache
 
 echo "Launching de Shrine the Melodies..."
-docker-compose up --build --no-cache -d
+docker-compose up -d  ##Error to --no-cache
 
 echo "Cleaning up dangling images..."
 docker image prune -f
