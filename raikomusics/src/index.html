@@ -88,7 +88,7 @@
 
   <!-- Upload Overlay -->
   <div id="upload-overlay" class="overlay hidden">
-    <div id="upload-form" class="overlay-panel shrine-panel w-full max-w-md p-8">
+    <div id="upload-form-container" class="overlay-panel shrine-panel w-full max-w-md p-8">
       <h2 class="text-2xl mb-6 text-center">Add a New Melody</h2>
       <form id="add-song-form">
         <div class="mb-4">
@@ -100,12 +100,13 @@
           <input type="text" id="song-artist" class="form-input w-full p-2 rounded" required>
         </div>
         <div class="mb-4">
-          <label for="cover-url" class="block mb-2 text-sm">Cover Image URL</label>
-          <input type="url" id="cover-url" class="form-input w-full p-2 rounded" required>
+          <label for="cover-file" class="block mb-2 text-sm">Cover Image</label>
+          <input type="file" id="cover-file" class="form-input w-full p-1 rounded" required
+            accept="image/jpeg, image/png, image/webp">
         </div>
         <div class="mb-6">
-          <label for="audio-url" class="block mb-2 text-sm">Audio File URL</label>
-          <input type="url" id="audio-url" class="form-input w-full p-2 rounded" required>
+          <label for="audio-file" class="block mb-2 text-sm">Audio File</label>
+          <input type="file" id="audio-file" class="form-input w-full p-1 rounded" required accept="audio/mpeg">
         </div>
         <div class="flex justify-end space-x-4">
           <button type="button" id="cancel-upload"
@@ -114,6 +115,14 @@
             class="px-6 py-2 text-sm bg-[var(--accent-red)] text-white rounded-lg hover:bg-opacity-80 transition">Add</button>
         </div>
       </form>
+      <!-- Upload Progress Indicator -->
+      <div id="upload-progress-container" class="mt-4 hidden">
+        <p id="upload-status-message" class="text-sm text-center mb-2">Uploading...</p>
+        <div class="w-full h-2 rounded-full progress-bar-bg">
+          <div id="upload-progress-bar" class="h-2 rounded-full progress-bar-fg"
+            style="width: 0%; transition: width 0.3s ease;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
