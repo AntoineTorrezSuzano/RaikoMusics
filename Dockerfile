@@ -6,17 +6,33 @@
 
 # CMD ["nginx", "-g", "daemon off;"]
 
-# Use the official Nginx image from Docker Hub
+# Stage 1: The Forge (Build the web assets)
+FROM node:18-alpine AS builder
+
+WORKDIR /usr/src/app
+
+# Copy only package files first to leverage Docker cache
+COPY raikomusics/package*.json ./raikomusics/
+RUN cd raikomusics && npm install
+
+# Copy the rest of the electron app source code
+COPY raikomusics/. ./raikomusics/
+
+# Build the application. This runs webpack and bundles everything.
+RUN cd raikomusics && npm run package
+
+
+# Stage 2: The Shrine (Serve the built assets with Nginx)
 FROM nginx:alpine
 
-# Copy the static website assets from your Electron app's renderer code.
-COPY ./raikomusics/src /usr/share/nginx/html
+# The final bundled code is located here after the build
+ARG BUNDLE_PATH=/usr/src/app/raikomusics/.webpack/renderer
 
-# Copy the Nginx configuration file
+# Copy the final bundled assets from the forge to the Nginx web root
+COPY --from=builder ${BUNDLE_PATH} /usr/share/nginx/html
+
+# Copy your nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 to the outside world
 EXPOSE 80
-
-# Start Nginx when the container launches
 CMD ["nginx", "-g", "daemon off;"]
