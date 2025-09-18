@@ -29,8 +29,9 @@ RUN cd raikomusics && npm run package
 # Stage 2: The Shrine (Serve the built assets with Nginx)
 FROM nginx:alpine
 
-# The final bundled code is located here after the build
-ARG BUNDLE_PATH=/usr/src/app/raikomusics/.webpack/renderer
+# The final bundled code is located within the packaged application resources.
+# This is the corrected path to the treasure.
+ARG BUNDLE_PATH=/usr/src/app/raikomusics/out/raikomusics-linux-x64/resources/app/.webpack/renderer
 
 # Copy the final bundled assets from the forge to the Nginx web root
 COPY --from=builder ${BUNDLE_PATH} /usr/share/nginx/html
