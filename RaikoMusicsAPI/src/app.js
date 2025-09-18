@@ -1,9 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const allRoutes = require('./routes'); // this will import src/routes/index.js
 const errorHandler = require('./middleware/errorHandler.middleware');
 
 const app = express();
 
+
+app.use(cors());
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
