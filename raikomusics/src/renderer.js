@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 4, title: '少女救世論', artist: 'Akatsuki Records', coverUrl: 'http://34.79.6.219/musicstream/004/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/004/song.mp3' },
 
   ];
-  let playlistMusic = [libraryMusic[0], libraryMusic[1], libraryMusic[2]]; // Start with a default playlist
+  let playlistMusic = []; // Start with a default playlist
 
   let currentTrackIndex = 0;
   let isPlaying = false;
@@ -229,8 +229,41 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadOverlay.classList.add('hidden');
   });
 
-  // Initial Load
-  renderPlaylist();
-  renderLibrary();
-  loadTrack(0);
+  async function initializePlayer() {
+    try {
+      const response = await fetch("http://34.79.6.219/api/music/get/list");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+
+      if (result.success && Array.isArray(result.data)) {
+        libraryMusic = result.data.map(song => ({
+          ...song,
+          id: song.id,
+          coverUrl: `http://34.79.6.219/musicstream/${song.id}/cover.jpg`,
+          audioUrl: `http://34.79.6.219/musicstream/${song.id}/song.mp3`,
+        }));
+        playlistMusic = [...libraryMusic];
+
+      } else {
+        throw new Error('API did not return a successful response or data is not an array.');
+      }
+
+    } catch (error) {
+      console.error("Could not fetch music library:", error);
+      libraryMusic = [];
+      playlistMusic = [];
+    }
+    // Initial Load
+    renderPlaylist();
+    renderLibrary();
+    if (playlistMusic.length > 0) {
+      loadTrack(0);
+    }
+  }
+  initializePlayer();
+
+
+
 });

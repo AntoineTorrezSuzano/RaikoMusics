@@ -46,7 +46,7 @@ module.exports = {
             },
           ],
         },
-        devContentSecurityPolicy: "default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https://placehold.co http://34.79.6.219; font-src 'self' https://fonts.gstatic.com; media-src 'self' http://34.79.6.219;",
+        devContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://placehold.co http://34.79.6.219/; font-src 'self'; media-src 'self' http://34.79.6.219/; connect-src 'self' http://34.79.6.219/;",
       },
     },
     // Fuses are used to enable/disable various Electron functionality
