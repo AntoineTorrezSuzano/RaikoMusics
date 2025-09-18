@@ -9,7 +9,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "start:web": "webpack serve --config webpack.web.config.js --mode development",
+    "build:web": "webpack --config webpack.web.config.js --mode production"
   },
   "keywords": [],
   "author": {
@@ -31,11 +33,14 @@
     "autoprefixer": "^10.4.21",
     "css-loader": "^6.11.0",
     "electron": "38.1.2",
+    "html-webpack-plugin": "^5.6.4",
     "node-loader": "^2.1.0",
     "postcss": "^8.5.6",
     "postcss-loader": "^8.2.0",
     "style-loader": "^3.3.4",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.13",
