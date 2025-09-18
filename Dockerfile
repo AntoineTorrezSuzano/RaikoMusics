@@ -9,6 +9,10 @@
 # Stage 1: The Forge (Build the web assets)
 FROM node:18-alpine AS builder
 
+# A true cultivator prepares his tools first.
+# Install Python, make, and a C++ compiler.
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /usr/src/app
 
 # Copy only package files first to leverage Docker cache
