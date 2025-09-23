@@ -66,8 +66,15 @@
 
         .music-container {
             max-width: 1200px;
-            height: calc(100vh - 4rem);
-            margin: 2rem auto;
+            min-height: calc(100vh - 2rem);
+            margin: 1rem auto;
+        }
+
+        @media (min-width: 768px) {
+            .music-container {
+                height: calc(100vh - 4rem);
+                margin: 2rem auto;
+            }
         }
 
         /* Player Styles */
