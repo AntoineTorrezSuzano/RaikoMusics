@@ -236,7 +236,7 @@
 
     <!-- Upload Overlay -->
     <div id="upload-overlay" class="overlay hidden">
-        <div id="upload-form" class="overlay-panel shrine-panel w-full max-w-md p-8">
+        <div id="upload-form-container" class="overlay-panel shrine-panel w-full max-w-md p-8">
             <h2 class="text-2xl mb-6 text-center">Add a New Melody</h2>
             <form id="add-song-form">
                 <div class="mb-4">
@@ -248,12 +248,14 @@
                     <input type="text" id="song-artist" class="form-input w-full p-2 rounded" required>
                 </div>
                 <div class="mb-4">
-                    <label for="cover-url" class="block mb-2 text-sm">Cover Image URL</label>
-                    <input type="url" id="cover-url" class="form-input w-full p-2 rounded" required>
+                    <label for="cover-file" class="block mb-2 text-sm">Cover Image</label>
+                    <input type="file" id="cover-file" class="form-input w-full p-1 rounded" required
+                        accept="image/jpeg, image/png, image/webp">
                 </div>
                 <div class="mb-6">
-                    <label for="audio-url" class="block mb-2 text-sm">Audio File URL</label>
-                    <input type="url" id="audio-url" class="form-input w-full p-2 rounded" required>
+                    <label for="audio-file" class="block mb-2 text-sm">Audio File</label>
+                    <input type="file" id="audio-file" class="form-input w-full p-1 rounded" required
+                        accept="audio/mpeg">
                 </div>
                 <div class="flex justify-end space-x-4">
                     <button type="button" id="cancel-upload"
@@ -262,10 +264,19 @@
                         class="px-6 py-2 text-sm bg-[var(--accent-red)] text-white rounded-lg hover:bg-opacity-80 transition">Add</button>
                 </div>
             </form>
+            <!-- Upload Progress Indicator -->
+            <div id="upload-progress-container" class="mt-4 hidden">
+                <p id="upload-status-message" class="text-sm text-center mb-2">Uploading...</p>
+                <div class="w-full h-2 rounded-full progress-bar-bg">
+                    <div id="upload-progress-bar" class="h-2 rounded-full progress-bar-fg"
+                        style="width: 0%; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+
         document.addEventListener('DOMContentLoaded', () => {
             // --- Background Effects (omitted for brevity) ---
             const effectsCanvas = document.getElementById("effects-canvas"), etx = effectsCanvas.getContext("2d"), barrierCanvas = document.getElementById("barrier-canvas"), btx = barrierCanvas.getContext("2d"); let particles = [], barrierLines = []; function resizeAll() { effectsCanvas.width = barrierCanvas.width = window.innerWidth, effectsCanvas.height = barrierCanvas.height = window.innerHeight } window.addEventListener("resize", resizeAll), resizeAll(); class Particle { constructor(t, e, i, s, n, a, h, l = 0) { this.x = t, this.y = e, this.color = i, this.size = s, this.life = n, this.initialLife = n, this.vx = a, this.vy = h, this.gravity = l } update() { this.vy += this.gravity, this.x += this.vx, this.y += this.vy, this.life-- } draw(t) { const e = this.life / this.initialLife; t.globalAlpha = e, t.fillStyle = this.color, t.beginPath(), t.arc(this.x, this.y, this.size, 0, 2 * Math.PI), t.fill(), t.globalAlpha = 1 } } class BarrierLine { constructor() { this.y = Math.random() * window.innerHeight, this.speed = .2 + Math.random() * .5, this.opacity = .05 + Math.random() * .1 } update() { this.y -= this.speed, this.y < 0 && (this.y = window.innerHeight) } draw(t) { t.strokeStyle = `rgba(248, 113, 113, ${this.opacity})`, t.lineWidth = 1, t.beginPath(), t.moveTo(0, this.y), t.lineTo(window.innerWidth, this.y), t.stroke() } } for (let t = 0; t < 50; t++)barrierLines.push(new BarrierLine); let weatherState = 1; setInterval(() => { weatherState = (weatherState + 1) % 3 }, 2e4); function animate() { etx.clearRect(0, 0, effectsCanvas.width, effectsCanvas.height), btx.clearRect(0, 0, barrierCanvas.width, barrierCanvas.height), barrierLines.forEach(t => { t.update(), t.draw(btx) }), 1 === weatherState && Math.random() > .3 ? particles.push(new Particle(Math.random() * window.innerWidth, -10, "#bfdbfe", 1, 100, 0, 10, .1)) : 2 === weatherState && Math.random() > .3 && particles.push(new Particle(Math.random() * window.innerWidth, -10, "#e2e8f0", 2 * Math.random() + 1, 200, Math.random() - .5, .8, 0)); for (let t = particles.length - 1; t >= 0; t--)particles[t].update(), particles[t].draw(etx), particles[t].life <= 0 && particles.splice(t, 1); requestAnimationFrame(animate) } animate();
@@ -288,13 +299,13 @@
             const libraryListEl = document.getElementById('library-list');
 
             let libraryMusic = [
-                { id: 1, title: '幻想のサテライト', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/002/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/002/song.mp3' },
-                { id: 2, title: 'The fear is oneself', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/001/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/001/song.mp3' },
-                { id: 3, title: '青いミレン、蒼いナミダ', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/003/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/003/song.mp3' },
-                { id: 4, title: '少女救世論', artist: 'Akatsuki Records', coverUrl: 'http://34.79.6.219/musicstream/004/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/004/song.mp3' },
+                // { id: 1, title: '幻想のサテライト', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/002/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/002/song.mp3' },
+                // { id: 2, title: 'The fear is oneself', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/001/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/001/song.mp3' },
+                // { id: 3, title: '青いミレン、蒼いナミダ', artist: 'Butaotome', coverUrl: 'http://34.79.6.219/musicstream/003/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/003/song.mp3' },
+                // { id: 4, title: '少女救世論', artist: 'Akatsuki Records', coverUrl: 'http://34.79.6.219/musicstream/004/cover.jpg', audioUrl: 'http://34.79.6.219/musicstream/004/song.mp3' },
 
             ];
-            let playlistMusic = [libraryMusic[0], libraryMusic[1], libraryMusic[2]]; // Start with a default playlist
+            let playlistMusic = []; // Start with a default playlist
 
             let currentTrackIndex = 0;
             let isPlaying = false;
@@ -395,7 +406,10 @@
                         if (!songExists) {
                             playlistMusic.push(song);
                             renderPlaylist();
-                            if (playlistMusic.length === 1) loadTrack(0);
+                            if (playlistMusic.length === 1) {
+                                loadTrack(0);
+                                playTrack();
+                            }
                             addButton.textContent = '✓';
                             addButton.classList.add('text-green-400');
                             setTimeout(() => {
@@ -423,9 +437,14 @@
                 loadTrack(currentTrackIndex);
                 if (isPlaying) playTrack();
             });
-
-            audioPlayer.addEventListener('timeupdate', () => { /* Omitted for brevity */ const p = (audioPlayer.currentTime / audioPlayer.duration) * 100; progressBar.style.width = `${p}%`, currentTimeEl.textContent = formatTime(audioPlayer.currentTime) });
-            progressContainer.addEventListener('click', (e) => { /* Omitted for brevity */ const t = progressContainer.clientWidth, i = e.offsetX; audioPlayer.duration && (audioPlayer.currentTime = i / t * audioPlayer.duration) });
+            audioPlayer.addEventListener('timeupdate', () => {
+                const p = (audioPlayer.currentTime / audioPlayer.duration) *
+                    100; progressBar.style.width = `${p}%`, currentTimeEl.textContent = formatTime(audioPlayer.currentTime)
+            });
+            progressContainer.addEventListener('click', (e) => {
+                const t = progressContainer.clientWidth, i = e.offsetX;
+                audioPlayer.duration && (audioPlayer.currentTime = i / t * audioPlayer.duration)
+            });
             audioPlayer.addEventListener('ended', () => { nextBtn.click(); });
 
             // --- Overlay Logic ---
@@ -437,37 +456,141 @@
             const cancelUploadBtn = document.getElementById('cancel-upload');
             const addSongForm = document.getElementById('add-song-form');
 
+            // New elements for upload progress
+            const uploadProgressContainer = document.getElementById('upload-progress-container');
+            const uploadProgressBar = document.getElementById('upload-progress-bar');
+            const uploadStatusMessage = document.getElementById('upload-status-message');
+
+
             libraryBtn.addEventListener('click', () => libraryOverlay.classList.remove('hidden'));
             closeLibraryBtn.addEventListener('click', () => libraryOverlay.classList.add('hidden'));
             openUploadBtn.addEventListener('click', () => {
                 libraryOverlay.classList.add('hidden');
                 uploadOverlay.classList.remove('hidden');
             });
-            cancelUploadBtn.addEventListener('click', () => uploadOverlay.classList.add('hidden'));
+            cancelUploadBtn.addEventListener('click', () => {
+                uploadOverlay.classList.add('hidden');
+                // Also hide progress bar if cancel is clicked
+                uploadProgressContainer.classList.add('hidden');
+                addSongForm.reset();
+            });
 
             [libraryOverlay, uploadOverlay].forEach(overlay => {
-                overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.add('hidden');
+                        uploadProgressContainer.classList.add('hidden');
+                        addSongForm.reset();
+                    }
+                });
             });
 
             addSongForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const newSong = {
-                    id: libraryMusic.length > 0 ? Math.max(...libraryMusic.map(s => s.id)) + 1 : 1,
-                    title: document.getElementById('song-title').value,
-                    artist: document.getElementById('song-artist').value,
-                    coverUrl: document.getElementById('cover-url').value,
-                    audioUrl: document.getElementById('audio-url').value,
+                const titleInput = document.getElementById('song-title');
+                const artistInput = document.getElementById('song-artist');
+                const coverFileInput = document.getElementById('cover-file');
+                const audioFileInput = document.getElementById('audio-file');
+
+                const songFile = audioFileInput.files[0];
+                const coverFile = coverFileInput.files[0];
+
+                if (!titleInput.value || !artistInput.value || !songFile || !coverFile) {
+                    // A simple alert is sufficient for a mortal's tool.
+                    alert('Please fill out all fields and select both files.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('title', titleInput.value);
+                formData.append('artist', artistInput.value);
+                formData.append('song', songFile);
+                formData.append('cover', coverFile);
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', 'http://34.79.6.219/api/music/upload', true);
+
+                // Show progress bar and set initial state
+                uploadProgressContainer.classList.remove('hidden');
+                uploadStatusMessage.textContent = 'Uploading 0%';
+                uploadProgressBar.style.width = '0%';
+                uploadProgressBar.style.backgroundColor = 'var(--accent-red)'; // Reset color on new upload
+
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        const percentComplete = Math.round((event.loaded / event.total) * 100);
+                        uploadProgressBar.style.width = percentComplete + '%';
+                        uploadStatusMessage.textContent = `Uploading ${percentComplete}%`;
+                    }
                 };
-                libraryMusic.push(newSong);
-                renderLibrary();
-                addSongForm.reset();
-                uploadOverlay.classList.add('hidden');
+
+                xhr.onload = async () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        const result = JSON.parse(xhr.responseText); if (result.success) {
+                            uploadStatusMessage.textContent = 'Upload successful!'; console.log('Upload successful:', result.data);
+                            setTimeout(async () => {
+                                addSongForm.reset();
+                                uploadOverlay.classList.add('hidden');
+                                uploadProgressContainer.classList.add('hidden');
+                                // Re-fetch the entire library to get the new song
+                                await initializePlayer();
+                            }, 1000); // Wait a moment to show the success message
+                        } else {
+                            // Use the error message from the server's response
+                            throw new Error(result.message || 'Upload failed on server');
+                        }
+                    } else {
+                        throw new Error(`Server responded with status: ${xhr.status}`);
+                    }
+                };
+
+                xhr.onerror = () => {
+                    const errorMsg = "Upload failed. A network error occurred.";
+                    console.error(errorMsg);
+                    uploadStatusMessage.textContent = errorMsg;
+                    uploadProgressBar.style.backgroundColor = '#ef4444'; // Use a distinct color for error
+                };
+
+                xhr.send(formData);
             });
 
-            // Initial Load
-            renderPlaylist();
-            renderLibrary();
-            loadTrack(0);
+
+            // --- Initial Load ---
+            async function initializePlayer() {
+                try {
+                    const response = await fetch('http://34.79.6.219/api/music/get/list');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const result = await response.json();
+
+                    if (result.success && Array.isArray(result.data)) {
+                        libraryMusic = result.data.map(song => ({
+                            id: song.id,
+                            artist: song.artist || 'Unknown Artist',
+                            title: song.title || 'Unknown Title',
+                            coverUrl: `http://34.79.6.219/musicstream/${song.id}/cover.jpg`,
+                            audioUrl: `http://34.79.6.219/musicstream/${song.id}/song.mp3`
+                        }));
+                        playlistMusic = [...libraryMusic];
+                    } else {
+                        throw new Error('API did not return a successful response or data is not an array.');
+                    }
+                } catch (error) {
+                    console.error("Could not fetch music library:", error);
+                    libraryMusic = [];
+                    playlistMusic = [];
+                }
+
+                renderLibrary();
+                renderPlaylist();
+                if (playlistMusic.length > 0) {
+                    loadTrack(0);
+                }
+            }
+
+            initializePlayer();
         });
     </script>
 </body>
