@@ -40,19 +40,25 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
-
+const uploader = upload.fields([{ name: 'song', maxCount: 1 }, { name: 'cover', maxCount: 1 }]);
 // This custom middleware calls multer and handles its specific errors, including cleanup
 const handleUpload = (req, res, next) => {
-    const uploader = upload.fields([{ name: 'song', maxCount: 1 }, { name: 'cover', maxCount: 1 }]);
-
     uploader(req, res, (err) => {
-        // If multer throws an error and we created a directory, remove it
+        // ifg multer throws an error and we created a directory, we remove it
         if (err && req.albumPath) {
             fs.rm(req.albumPath, { recursive: true, force: true }, () => { });
         }
-        // Pass the error to the global error handler
-        next(err);
+        if (err) {
+            return next(err);
+        }
+        // this next pass the error to the global error handler
+        next();
     });
 };
 
-module.exports = { handleUpload };
+module.exports = { handleUpload, fileFilter, storage };
+
+
+
+
+
