@@ -10,7 +10,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: RaikoMusicAPI
+        working-directory: RaikoMusicsAPI
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
