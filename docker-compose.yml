@@ -2,7 +2,7 @@ services:
   # The Shrine Frontend
   frontend:
     build:
-      context: .
+      context: ./raikoMusicsWeb
       dockerfile: Dockerfile
     container_name: raikomusics_container
     restart: unless-stopped

@@ -44,6 +44,14 @@ module.exports = {
                 js: './src/preload.js',
               },
             },
+            {
+              html: './src/manage/index.html',
+              js: './src/manage/manage.js',
+              name: 'manage_window',
+              preload: {
+                js: './src/manage/preload.js',
+              }
+            }
           ],
         },
         devContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://placehold.co http://34.79.6.219/; font-src 'self'; media-src 'self' http://34.79.6.219/; connect-src 'self' http://34.79.6.219/;",

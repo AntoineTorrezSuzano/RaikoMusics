@@ -24,7 +24,6 @@
   font-weight: 400;
   src: url('./fonts/material-symbols-outlined-v279-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
-
         :root {
             --bg-start: #1e293b;
             --bg-end: #0f172a;
