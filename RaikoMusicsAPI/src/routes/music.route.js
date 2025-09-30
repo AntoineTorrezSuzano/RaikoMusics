@@ -4,8 +4,9 @@ const { handleUpload } = require('../middleware/upload.middleware')
 
 const router = express.Router();
 
-// POST /api/music/upload
+// /api/music/
 router.post("/upload", handleUpload, musicController.uploadMusic);
 router.get("/get/list", musicController.getMusicList)
+router.delete("/delete", musicController.deleteMusicById)
 
 module.exports = router;
