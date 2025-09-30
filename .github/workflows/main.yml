@@ -10,7 +10,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./RaikoMusicAPI
+        working-directory: RaikoMusicAPI
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
         
       - name: Install Dependenvies
-        run: npm ci
+        run: npm 
       
       - name: Run the Tests
         run: npm test
