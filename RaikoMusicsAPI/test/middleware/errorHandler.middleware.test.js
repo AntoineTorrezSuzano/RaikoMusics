@@ -44,7 +44,7 @@ describe('errorHandler', () => {
 
 
         expect(mockResponse.status).toHaveBeenCalledWith(400);
-        expect(mockResponse.json).toHaveBeenCalledWith({ success: false, message: 'An error occurred during file' });
+        expect(mockResponse.json).toHaveBeenCalledWith({ success: false, message: 'An error occurred during file upload.' });
     })
 
 })
