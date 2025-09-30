@@ -7,6 +7,6 @@ const router = express.Router();
 // /api/music/
 router.post("/upload", handleUpload, musicController.uploadMusic);
 router.get("/get/list", musicController.getMusicList)
-router.delete("/delete", musicController.deleteMusicById)
+router.delete("/delete/:id", musicController.deleteMusicById)
 
 module.exports = router;
