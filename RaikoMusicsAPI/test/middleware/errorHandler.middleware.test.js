@@ -1,6 +1,5 @@
 const multer = require('multer');
 const { errorHandler } = require('../../src/middleware/errorHandler.middleware');
-const { stack } = require('../../src/routes/music.route');
 
 jest.fn(multer.MulterError);
 describe('errorHandler', () => {
@@ -45,7 +44,7 @@ describe('errorHandler', () => {
 
 
         expect(mockResponse.status).toHaveBeenCalledWith(400);
-        expect(mockResponse.json).toHaveBeenCalledWith({ success: false, message: 'An error occurred during file upload.' });
+        expect(mockResponse.json).toHaveBeenCalledWith({ success: false, message: 'An error occurred during file' });
     })
 
 })

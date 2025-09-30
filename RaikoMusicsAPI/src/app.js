@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const allRoutes = require('./routes'); // this will import src/routes/index.js
-const errorHandler = require('./middleware/errorHandler.middleware');
+const { errorHandler } = require('./middleware/errorHandler.middleware');
 
 const app = express();
 
