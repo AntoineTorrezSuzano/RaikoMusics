@@ -1,8 +1,4 @@
-﻿Of course. Here is a professionally structured `README.md` for your project.
-
------
-
-# RaikoMusics: Self-Hosted Music Streaming Platform
+﻿# RaikoMusics: Self-Hosted Music Streaming Platform
 
 RaikoMusics is a comprehensive, self-hosted music streaming service designed for users who wish to maintain control over their personal music library. The platform provides a seamless and user-friendly experience for managing and streaming music across various devices, including a web interface and a dedicated desktop application. The entire ecosystem is containerized with Docker, ensuring portability and ease of deployment.
 
