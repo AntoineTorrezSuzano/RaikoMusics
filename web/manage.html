@@ -253,12 +253,8 @@
                 if (!songToDelete) return;
 
                 try {
-                    const response = await fetch('http://34.79.6.219/api/music/delete', {
+                    const response = await fetch(`http://34.79.6.219/api/music/delete/${songToDelete.id}`, {
                         method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ id: songToDelete.id }),
                     });
 
                     const result = await response.json();
@@ -305,7 +301,7 @@
                             <button class="edit-btn text-gray-400 hover:text-white transition p-2 rounded-full hover:bg-white/10 **w-10 h-10 flex items-center justify-center**" title="Edit">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
-                            
+
                             <button class="delete-btn text-gray-400 hover:text-red-400 transition p-2 rounded-full hover:bg-white/10 **w-10 h-10 flex items-center justify-center**" title="Delete">
                                 <span class="material-symbols-outlined">delete</span>
                             </button>
