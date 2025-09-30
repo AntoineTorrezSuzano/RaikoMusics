@@ -1,0 +1,20 @@
+{
+  "name": "raikomusics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd RaikoMusicAPI; npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntoineTorrezSuzano/RaikoMusic.git"
+  },
+  "keywords": [],
+  "author": "Yumeparin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AntoineTorrezSuzano/RaikoMusic/issues"
+  },
+  "homepage": "https://github.com/AntoineTorrezSuzano/RaikoMusic#readme"
+}
