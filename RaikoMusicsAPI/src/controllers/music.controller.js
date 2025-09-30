@@ -86,18 +86,19 @@ const getMusicList = async (req, res, next) => {
 
 const deleteMusicById = async (req, res, next) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         if (!id) {
             return res.status(400).json({ success: false, message: 'id is required.' });
         }
         let metadata;
         try {
-            const folderToDelete = config.UPLOADS_DIR + id;
-            const metaDataContent = await fs.readFile(folderToDelete + 'metadata.json');
+            const folderToDelete = path.join(config.UPLOADS_DIR, id);
+            const metadataPath = path.join(folderToDelete, 'metadata.json');
+            const metaDataContent = await fs.readFile(metadataPath);
             metadata = JSON.parse(metaDataContent);
             await fs.rm(folderToDelete, { recursive: true, force: true });
         } catch (error) {
-            return res.status(400).json({ success: false, message: 'music doesn\'t exist' });
+            return res.status(404).json({ success: false, message: 'music doesn\'t exist' });
         }
         console.log(`The music "${metadata.title}" has been deleted (${id})`);
         res.status(200).json({
