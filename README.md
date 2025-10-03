@@ -1,33 +1,57 @@
-﻿# RaikoMusics: Self-Hosted Music Streaming Platform
+﻿<div align="center">
+<h1 align="center">RaikoMusics</h1>
 
-RaikoMusics is a comprehensive, self-hosted music streaming service designed for users who wish to maintain control over their personal music library. The platform provides a seamless and user-friendly experience for managing and streaming music across various devices, including a web interface and a dedicated desktop application. The entire ecosystem is containerized with Docker, ensuring portability and ease of deployment.
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
+  <a href="https://github.com/AntoineTorrezSuzano/RaikoMusics/blob/main/.github/workflows/main.yml"><img src="https://img.shields.io/github/actions/workflow/status/AntoineTorrezSuzano/RaikoMusics/main.yml" alt="Issues"></a>
+</p>
+</div>
+
+<h3 align="center">
+RaikoMusics is a lightweight music streaming application designed for simplicity and speed. It provides an intuitive interface for users to listen to music and for artists to publish their work.
+
+Primarily, RaikoMusics serves as a learning project to explore and implement various DevOps technologies. With the first stable version now online, the project provides a solid foundation for many future enhancements, such as upgrading the audio streaming from HTTP range requests to HLS (HTTP Live Streaming), implementing user management, adding playlist creation, developing a recommendation algorithm, and much more!
+</h3>
+
+## Screenshots
+
+<div align="center">
+  <p><em>Web Application:</em></p>
+  <img src="docs/web-app.png" alt="RaikoMusics Web Application" width="700">
+</div>
+
+<br>
+
+<div align="center">
+  <p><em>Desktop Application:</em></p>
+  <img src="docs/desktop-app.png" alt="RaikoMusics Desktop Application" width="700">
+</div>
 
 ## Key Features
 
-  * **Centralized Music Library**: Host your entire music collection on your own server.
-  * **Web and Desktop Clients**: Access your music through a feature-rich web player or a native desktop application built with Electron.
-  * **Intuitive Music Management**: A dedicated management interface for uploading, editing metadata, and organizing your music library.
-  * **Dockerized Environment**: The application suite is fully containerized, simplifying setup, deployment, and scalability.
-  * **Automated CI/CD**: A pre-configured GitHub Actions workflow automates the building and deployment of Docker images.
+* **Self-Hosted Library**: Host and manage your personal music collection on your own server.
+* **Simple Management**: An easy-to-use management page for uploading and organizing your music.
+* **Web and Desktop Clients**: Access your music from a web browser or through a dedicated desktop application.
+* **Containerized with Docker**: The entire application is packaged with Docker, making setup and deployment straightforward.
+* **Automated CI/CD**: Includes a GitHub Actions workflow to automate the building and deployment process.
 
 ## Architecture Overview
 
-RaikoMusics is built on a microservices architecture, which separates the core functionalities into independent, containerized services:
+RaikoMusics is composed of several distinct services that work together, all managed by `docker-compose`. This separation makes the system easier to maintain and scale.
 
-  * **`RaikoMusicsAPI`**: A Node.js and Express-based RESTful API that serves as the backbone of the application, handling all business logic and data management.
-  * **`AudioStreamServer`**: A lightweight, high-performance server, optimized for efficient and reliable streaming of audio files.
-  * **`raikoMusicsWeb`**: A static web server that delivers the frontend client for the music player and management dashboard.
-  * **`raikomusics`**: The Electron-based desktop application that provides a native user experience.
-
-These services are orchestrated using `docker-compose`, which manages the networking and lifecycle of the containers.
+* **`RaikoMusicsAPI`**: The central API, built with Node.js and Express, that handles core logic like file uploads and music metadata.
+* **`AudioStreamServer`**: A simple and efficient Nginx server dedicated to streaming audio files to the clients.
+* **`raikoMusicsWeb`**: A static web server that hosts the frontend for the web player and the management interface.
+* **`raikomusics`**: The native desktop application built with Electron, which provides the same experience as the web client in a standalone app.
 
 ## Technology Stack
 
-  * **Backend**: Node.js, Express, Nginx
-  * **Frontend**: HTML5, CSS3, JavaScript
-  * **Desktop App**: Electron
-  * **Containerization**: Docker, Docker Compose
-  * **CI/CD**: GitHub Actions
+* **Backend API**: Node.js, Express
+* **Web Server / Reverse Proxy**: Nginx (used as the main reverse proxy for the server and for serving audio files within the `AudioStreamServer` container)
+* **Frontend**: HTML5, CSS3, JavaScript
+* **Desktop App**: Electron
+* **Containerization**: Docker, Docker Compose
+* **CI/CD**: GitHub Actions
 
 ## Getting Started
 
@@ -128,11 +152,6 @@ Before launching the application, you must configure Nginx to correctly route re
 
 ⚠️ **Important**: The project's frontend code contains hardcoded IP addresses from the original development environment (e.g., `https://35.79.6.219`). You **must** replace these with your server's IP address or domain name for the application to work correctly.
 
-Perform a project-wide search for the hardcoded IP and replace all instances. Pay special attention to the following files:
-
-  * `./index.html`
-  * `./raikomusics/src/index.html`
-
 -----
 
 ## Usage
@@ -176,6 +195,7 @@ When you upload a song via the `POST /api/music/upload` endpoint, the files are 
 ## Deployment
 
 The project includes a `deploy.sh` script to facilitate deployment to a production environment. This script, in conjunction with the GitHub Actions workflow, automates the process of pulling the latest Docker images and restarting the services.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/AntoineTorrezSuzano/RaikoMusics/blob/main/LICENSE) file for more details.
